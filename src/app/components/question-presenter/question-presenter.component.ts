@@ -1,18 +1,20 @@
-import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
-import { Question } from '../../models/question.model';
+import { Component, inject } from '@angular/core';
 import { SharedModule } from '../../shared.module';
-import { FormControl, Validators } from '@angular/forms';
+import { QuizStore } from '../../store/quiz.store';
+import { patchState } from '@ngrx/signals';
 
 @Component({
-    selector: 'app-question-presenter',
-    imports: [SharedModule],
-    templateUrl: './question-presenter.component.html',
-    styleUrl: './question-presenter.component.scss'
+  selector: 'app-question-presenter',
+  imports: [SharedModule],
+  templateUrl: './question-presenter.component.html',
+  styleUrl: './question-presenter.component.scss',
 })
 export class QuestionPresenterComponent {
-  readonly question = signal<Question>({
-    caption: ['Red', 'Green'],
-    answers: ['Red', 'Green', 'Blue', 'Yellow'],
-    correctIndex: 3
-  });
+  readonly store = inject(QuizStore);
+
+  readonly question = this.store.currentQuestion;
+
+  onSelect(index: number) {
+    this.store.addAnswer(index)
+  }
 }

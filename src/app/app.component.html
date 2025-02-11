@@ -1,6 +1,19 @@
-<app-toolbar caption="Colors Quiz!" icon="palette"/>
+<app-toolbar caption="Colors Quiz!" icon="palette">
+  <button (click)="store.reset()" mat-icon-button matTooltip="Reset Quiz">
+    <mat-icon>restart_alt</mat-icon>
+  </button>
+  <button mat-icon-button matTooltip="Generate New Quiz">
+    <mat-icon>auto_fix_high</mat-icon>
+  </button>
+</app-toolbar>
 <div class="main">
-    <app-question-presenter/>
-    <app-progress/>
-    <app-done/>
+  @if(!store.isDone()) {
+    <app-progress
+      [value]="store.currentQuestionIndex()"
+      [max]="store.questionsCount()"
+    />
+    <app-question-presenter />
+  } @else {
+    <app-done [correct]="store.correctCount()" [total]="store.questionsCount()" />
+  }
 </div>

@@ -9,7 +9,5 @@ import { SharedModule } from '../../shared.module';
 })
 export class ToolbarComponent {
   readonly caption = input.required<string>();
-
   readonly icon = input('');
-
 }
