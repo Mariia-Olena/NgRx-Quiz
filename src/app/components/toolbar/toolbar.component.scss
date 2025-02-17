@@ -11,12 +11,19 @@
   color: var(--p-500);
   font-weight: bold;
 
-  mat-icon {
-    width: auto;
-    height: auto;
-    font-size: 40px;
-    color: var(--p-400);
-    margin-inline-end: 10px;
+  .brand {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+
+    mat-icon {
+      width: auto;
+      height: auto;
+      font-size: 40px;
+      color: var(--p-400);
+      margin-inline-end: 10px;
+    }
   }
 
   .actions {

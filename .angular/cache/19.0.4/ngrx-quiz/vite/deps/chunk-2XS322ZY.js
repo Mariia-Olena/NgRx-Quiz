@@ -378,6 +378,9 @@ function coerceObservable(data) {
 }
 
 // node_modules/@angular/cdk/fesm2022/coercion.mjs
+function coerceBooleanProperty(value) {
+  return value != null && `${value}` !== "false";
+}
 function coerceNumberProperty(value, fallbackValue = 0) {
   if (_isNumberValue(value)) {
     return Number(value);
@@ -5238,6 +5241,7 @@ var _MatInternalFormField = class __MatInternalFormField {
 
 export {
   Platform,
+  normalizePassiveListenerOptions,
   RtlScrollAxisType,
   supportsScrollBehavior,
   getRtlScrollAxisType,
@@ -5247,10 +5251,12 @@ export {
   _CdkPrivateStyleLoader,
   ESCAPE,
   hasModifierKey,
+  coerceBooleanProperty,
   coerceNumberProperty,
   coerceArray,
   coerceCssPixelValue,
   coerceElement,
+  AriaDescriber,
   InteractivityChecker,
   FocusTrapFactory,
   FocusMonitor,
@@ -5299,4 +5305,4 @@ export {
   MatRippleLoader,
   _MatInternalFormField
 };
-//# sourceMappingURL=chunk-4UVC6KNY.js.map
+//# sourceMappingURL=chunk-2XS322ZY.js.map

@@ -1,9 +1,13 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { QuizStore } from './store/quiz.store';
+import { provideRouter } from '@angular/router';
+import { DICTIONARIES_TOKEN } from './tokens/dictionaries.token';
+import { DICTIONARIES } from './data/dictionaries';
+import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideRouter(routes),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    QuizStore
-  ]
+    { provide: DICTIONARIES_TOKEN, useValue: DICTIONARIES },
+  ],
 };
