@@ -12,3 +12,12 @@ export function changeLanguage(
     return { selectedLanguage };
   };
 }
+
+export function resetLanguages(
+  languages: string[]
+): PartialStateUpdater<AppSlice> {
+  return () => ({
+    possibleLanguage: languages,
+    selectedLanguage: languages[0],
+  });
+}
