@@ -1,9 +1,15 @@
+import { Dictionary } from '../data/dictionaries';
+
 export interface AppSlice {
   readonly selectedLanguage: string;
-  readonly possibleLanguage: string[];
+  readonly possibleLanguages: string[];
+  readonly selectedDictionary: Dictionary | null;
+  readonly isBusy: boolean;
 }
 
 export const initialAppSlice: AppSlice = {
   selectedLanguage: '',
-  possibleLanguage: [],
+  possibleLanguages: [],
+  selectedDictionary: null,
+  isBusy: false,
 };
