@@ -7,6 +7,7 @@ import { DoneComponent } from './components/done/done.component';
 import { FlagComponent } from '../../components/flag/flag.component';
 import { QuizStore } from './store/quiz.store';
 import { AppStore } from '../../store/app.store';
+import { BusyComponent } from "../../components/busy/busy.component";
 
 @Component({
   selector: 'app-quiz-page',
@@ -17,7 +18,8 @@ import { AppStore } from '../../store/app.store';
     ProgressComponent,
     DoneComponent,
     FlagComponent,
-  ],
+    BusyComponent
+],
   templateUrl: './quiz.component.html',
   styleUrl: './quiz.component.scss',
 })

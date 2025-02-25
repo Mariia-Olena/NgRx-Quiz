@@ -8,10 +8,13 @@
     <mat-icon>restart_alt</mat-icon>
   </button>
   <button mat-icon-button matTooltip="Generate New Quiz">
-    <mat-icon>auto_fix_high</mat-icon>
+    <mat-icon (click)="store.generateQuiz()">auto_fix_high</mat-icon>
   </button>
 </app-toolbar>
 <div class="main">
+  @if (store.isBusy()) {
+    <app-busy />
+  }
   @if(store.isDone()) {
     <app-done />
   } @else {
