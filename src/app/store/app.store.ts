@@ -6,6 +6,7 @@ import {
   withProps,
   withState,
 } from '@ngrx/signals';
+import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { initialAppSlice } from './app.slice';
 import { inject } from '@angular/core';
@@ -13,16 +14,19 @@ import { tapResponse } from '@ngrx/operators';
 import {
   changeLanguage,
   resetLanguages,
-  setBusy,
   setDictionary,
 } from './app.updaters';
 import { DictionariesService } from '../services/dictionaries.service';
 import { switchMap, tap } from 'rxjs';
 import { NotificationsService } from '../services/notifications.service';
+import { withBusy } from '../custom-features/with-busy/with-busy.feature';
+import { setBusy, setIdle } from '../custom-features/with-busy/with-busy.updaters';
 
 export const AppStore = signalStore(
   { providedIn: 'root' },
+  withDevtools('app-store'),
   withState(initialAppSlice),
+  withBusy(),
   withProps(() => {
     const _notifications = inject(NotificationsService);
     const _dictionariesService = inject(DictionariesService);
@@ -37,13 +41,13 @@ export const AppStore = signalStore(
   withMethods((store) => {
     const _invalidateDictionary = rxMethod<string>((input$) =>
       input$.pipe(
-        tap(() => patchState(store, setBusy(true))),
+        tap(() => patchState(store, setBusy())),
         switchMap((lang) =>
           store._dictionariesService.getDictionaryWithDelay(lang).pipe(
             tapResponse({
               next: (dict) => patchState(store, setDictionary(dict)),
               error: (err) => store._notifications.error(`${err}`),
-              finalize: () => patchState(store, setBusy(false)),
+              finalize: () => patchState(store, setIdle()),
             })
           )
         )

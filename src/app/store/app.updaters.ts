@@ -23,10 +23,6 @@ export function resetLanguages(
   });
 }
 
-export function setBusy(isBusy: boolean): PartialStateUpdater<AppSlice> {
-  return () => ({ isBusy });
-}
-
 export function setDictionary(
   dictionary: Dictionary
 ): PartialStateUpdater<AppSlice> {

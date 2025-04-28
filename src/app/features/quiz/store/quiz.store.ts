@@ -1,16 +1,15 @@
 import {
-  getState,
   patchState,
   signalStore,
   withComputed,
-  withHooks,
   withMethods,
   withProps,
   withState,
 } from '@ngrx/signals';
-import { initialQuizSlice, QuizSlice } from './quiz.slice';
-import { computed, effect, inject } from '@angular/core';
-import { addAnswer, resetQuestions, resetQuiz, setBusy } from './quiz.updaters';
+import { withDevtools } from '@angular-architects/ngrx-toolkit';
+import { initialQuizSlice } from './quiz.slice';
+import { computed, inject } from '@angular/core';
+import { addAnswer, resetQuestions, resetQuiz } from './quiz.updaters';
 import { getCorrectCount } from './quiz.helpers';
 import { translate, translateToPairs } from '../../../store/app.helpers';
 import { QUESTION_CAPTION } from '../../../data/dictionaries';
@@ -18,9 +17,14 @@ import { AppStore } from '../../../store/app.store';
 import { ColorQuizGeneratorService } from '../../../services/color-quiz-generator.service';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { exhaustAll, map, tap } from 'rxjs';
+import { withLocalStorage } from '../../../custom-features/with-local-storage.feature';
+import { withBusy } from '../../../custom-features/with-busy/with-busy.feature';
+import { setBusy, setIdle } from "../../../custom-features/with-busy/with-busy.updaters";
 
 export const QuizStore = signalStore(
+  withDevtools('quiz-store'),
   withState(initialQuizSlice),
+  withBusy(),
   withProps(() => ({
     _generatorService: inject(ColorQuizGeneratorService),
   })),
@@ -64,32 +68,14 @@ export const QuizStore = signalStore(
     reset: () => patchState(store, resetQuiz()),
     generateQuiz: rxMethod<void>((trigger$) =>
       trigger$.pipe(
-        tap(() => patchState(store, setBusy(true))),
+        tap(() => patchState(store, setBusy())),
         map(() => store._generatorService.createRandomQuizAsync()),
         exhaustAll(),
         tap((questions) =>
-          patchState(store, setBusy(false), resetQuestions(questions))
+          patchState(store, setIdle(), resetQuestions(questions))
         )
       )
     ),
   })),
-  withHooks((store) => ({
-    onInit: () => {
-      console.log('QuizStore initialized');
-      const stateJson = localStorage.getItem('quiz');
-      if (stateJson) {
-        const state = JSON.parse(stateJson) as QuizSlice;
-        patchState(store, state);
-      }
-
-      effect(() => {
-        const state = getState(store);
-        const stateJson = JSON.stringify(state);
-        localStorage.setItem('quiz', stateJson);
-      });
-    },
-    onDestroy: () => {
-      console.log('QuizStore destroyed');
-    },
-  }))
+  withLocalStorage('quiz-store')
 );
